@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 
@@ -12,6 +13,9 @@ type Props = {
 };
 
 const TodoItem = ({ todo, todos, setTodos }: Props) => {
+    const [isEdit, setIsEdit] = useState<boolean>(todo.isDone);
+    const [editedText, setEditedText] = useState<string>(todo.todo);
+
     const completeTodo = (id: number) => {
         setTodos(
             todos.map((todo) =>
@@ -24,19 +28,64 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
         setTodos(todos.filter((todo) => todo.id !== id));
     };
 
+    const handleEditClick = () => {
+        setIsEdit((prevState) => !prevState);
+    };
+
+    const editTodo = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setTodos(
+            todos.map((item) =>
+                item.id === todo.id
+                    ? {
+                          ...item,
+                          todo: editedText,
+                      }
+                    : item
+            )
+        );
+
+        setIsEdit((prevState) => !prevState);
+    };
+
+    const handleEditText = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedText(e.target.value);
+    };
+
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        inputRef.current?.focus();
+    });
+
     return (
-        <form className={styles.item}>
-            <span
-                className={styles.todo}
-                style={{
-                    textDecoration: todo.isDone ? "line-through" : "none",
-                }}
-            >
-                {todo.todo}
-            </span>
+        <form className={styles.item} onSubmit={editTodo}>
+            {isEdit ? (
+                <input
+                    className={styles.todo}
+                    type="text"
+                    value={editedText}
+                    onChange={handleEditText}
+                    style={{
+                        backgroundColor: "transparent",
+                        fontFamily: "inherit",
+                    }}
+                    ref={inputRef}
+                />
+            ) : (
+                <span
+                    className={styles.todo}
+                    style={{
+                        textDecoration: todo.isDone ? "line-through" : "none",
+                    }}
+                >
+                    {todo.todo}
+                </span>
+            )}
 
             <div>
-                <span className={styles.icon}>
+                <span className={styles.icon} onClick={handleEditClick}>
                     <AiFillEdit />
                 </span>
                 <span
@@ -57,9 +106,3 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
 };
 
 export default TodoItem;
-
-/*
-
-- меняем изДан на противоположный
-
-*/
