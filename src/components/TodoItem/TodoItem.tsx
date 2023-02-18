@@ -16,6 +16,8 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
     const [isEdit, setIsEdit] = useState<boolean>(todo.isDone);
     const [editedText, setEditedText] = useState<string>(todo.todo);
 
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const completeTodo = (id: number) => {
         setTodos(
             todos.map((todo) =>
@@ -29,7 +31,9 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
     };
 
     const handleEditClick = () => {
-        setIsEdit((prevState) => !prevState);
+        if (!todo.isDone) {
+            setIsEdit((prevState) => !prevState);
+        }
     };
 
     const editTodo = (e: React.FormEvent) => {
@@ -54,8 +58,6 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
     const handleEditText = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEditedText(e.target.value);
     };
-
-    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         inputRef.current?.focus();

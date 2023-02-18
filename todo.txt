@@ -1,2 +1,0 @@
-- bug: create empty todo
-- bug: edit completed todo
