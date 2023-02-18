@@ -35,18 +35,20 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
     const editTodo = (e: React.FormEvent) => {
         e.preventDefault();
 
-        setTodos(
-            todos.map((item) =>
-                item.id === todo.id
-                    ? {
-                          ...item,
-                          todo: editedText,
-                      }
-                    : item
-            )
-        );
+        if (editedText) {
+            setTodos(
+                todos.map((item) =>
+                    item.id === todo.id
+                        ? {
+                              ...item,
+                              todo: editedText,
+                          }
+                        : item
+                )
+            );
 
-        setIsEdit((prevState) => !prevState);
+            setIsEdit((prevState) => !prevState);
+        }
     };
 
     const handleEditText = (e: React.ChangeEvent<HTMLInputElement>) => {
