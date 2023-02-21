@@ -61,7 +61,7 @@ const TodoItem = ({ todo, todos, setTodos }: Props) => {
 
     useEffect(() => {
         inputRef.current?.focus();
-    });
+    }, [isEdit]);
 
     return (
         <form className={styles.item} onSubmit={editTodo}>
