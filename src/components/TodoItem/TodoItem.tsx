@@ -13,7 +13,7 @@ type Props = {
 };
 
 const TodoItem = ({ todo, todos, setTodos }: Props) => {
-    const [isEdit, setIsEdit] = useState<boolean>(todo.isDone);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
     const [editedText, setEditedText] = useState<string>(todo.todo);
 
     const inputRef = useRef<HTMLInputElement>(null);
