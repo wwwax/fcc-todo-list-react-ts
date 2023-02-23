@@ -1,40 +1,70 @@
 import TodoItem from "../TodoItem/TodoItem";
 import { Todo } from "../../model";
 import s from "./TodoList.module.css";
+import { Droppable } from "react-beautiful-dnd";
 
 interface Props {
     todos: Todo[];
     setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+    completedTodos: Todo[];
+    setCompletedTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-const TodoList: React.FC<Props> = ({ todos, setTodos }) => {
+const TodoList: React.FC<Props> = ({
+    todos,
+    setTodos,
+    completedTodos,
+    setCompletedTodos,
+}) => {
     return (
         <div className={s.container}>
-            <div className={s.todos}>
-                <span className={s.todos__heading}>Active Tasks</span>
+            <Droppable droppableId="TodosList">
+                {(provided) => (
+                    <div
+                        className={s.todos}
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
+                        <span className={s.todos__heading}>Active Tasks</span>
 
-                {todos.map((todo) => (
-                    <TodoItem
-                        todo={todo}
-                        key={todo.id}
-                        todos={todos}
-                        setTodos={setTodos}
-                    />
-                ))}
-            </div>
+                        {todos.map((todo, index) => (
+                            <TodoItem
+                                index={index}
+                                todo={todo}
+                                key={todo.id}
+                                todos={todos}
+                                setTodos={setTodos}
+                            />
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
 
-            <div className={`${s.todos} ${s.remove}`}>
-                <span className={s.todos__heading}>Completed Tasks</span>
+            <Droppable droppableId="TodosRemove">
+                {(provided) => (
+                    <div
+                        className={`${s.todos} ${s.remove}`}
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
+                        <span className={s.todos__heading}>
+                            Completed Tasks
+                        </span>
 
-                {todos.map((todo) => (
-                    <TodoItem
-                        todo={todo}
-                        key={todo.id}
-                        todos={todos}
-                        setTodos={setTodos}
-                    />
-                ))}
-            </div>
+                        {completedTodos.map((todo, index) => (
+                            <TodoItem
+                                index={index}
+                                todo={todo}
+                                key={todo.id}
+                                todos={completedTodos}
+                                setTodos={setCompletedTodos}
+                            />
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
         </div>
     );
 };
