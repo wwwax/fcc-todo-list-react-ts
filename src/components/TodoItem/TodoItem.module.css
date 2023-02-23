@@ -7,6 +7,10 @@
     transition: all 0.2s linear;
 }
 
+.item.drag {
+    box-shadow: 0 0 20px black;
+}
+
 .item:hover {
     transform: scale(1.03);
     box-shadow: 0 0 5px #000;
